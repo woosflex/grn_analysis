@@ -113,6 +113,233 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
 <section id="package-installation-and-setup" class="level3">
 <h3 class="anchored" data-anchor-id="package-installation-and-setup">Package Installation and Setup</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if (!require("BiocManager", quietly = TRUE))</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     install.packages("BiocManager")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># BiocManager::install(version = "3.20")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("tidyverse")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># For data manipulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BiocManager::install("GEOquery")</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GEOquery)     <span class="co"># For retrieving GEO datasets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Biobase
+Loading required package: BiocGenerics
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:lubridate':
+
+    intersect, setdiff, union
+
+The following objects are masked from 'package:dplyr':
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,
+    table, tapply, union, unique, unsplit, which.max, which.min
+
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Setting options('download.file.method.GEOquery'='auto')
+Setting options('GEOquery.inmemory.gpl'=FALSE)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BiocManager::install("DESeq2")</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)       <span class="co"># For gene expression dataset normalization and filtering</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: S4Vectors
+Loading required package: stats4
+
+Attaching package: 'S4Vectors'
+
+The following objects are masked from 'package:lubridate':
+
+    second, second&lt;-
+
+The following objects are masked from 'package:dplyr':
+
+    first, rename
+
+The following object is masked from 'package:tidyr':
+
+    expand
+
+The following object is masked from 'package:utils':
+
+    findMatches
+
+The following objects are masked from 'package:base':
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+
+Attaching package: 'IRanges'
+
+The following object is masked from 'package:lubridate':
+
+    %within%
+
+The following objects are masked from 'package:dplyr':
+
+    collapse, desc, slice
+
+The following object is masked from 'package:purrr':
+
+    reduce
+
+Loading required package: GenomicRanges
+Loading required package: GenomeInfoDb
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: 'matrixStats'
+
+The following objects are masked from 'package:Biobase':
+
+    anyMissing, rowMedians
+
+The following object is masked from 'package:dplyr':
+
+    count
+
+
+Attaching package: 'MatrixGenerics'
+
+The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+The following object is masked from 'package:Biobase':
+
+    rowMedians</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("igraph")</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)       <span class="co"># For network graph construction</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'igraph'
+
+The following object is masked from 'package:GenomicRanges':
+
+    union
+
+The following object is masked from 'package:IRanges':
+
+    union
+
+The following object is masked from 'package:S4Vectors':
+
+    union
+
+The following objects are masked from 'package:BiocGenerics':
+
+    normalize, path, union
+
+The following objects are masked from 'package:lubridate':
+
+    %--%, union
+
+The following objects are masked from 'package:dplyr':
+
+    as_data_frame, groups, union
+
+The following objects are masked from 'package:purrr':
+
+    compose, simplify
+
+The following object is masked from 'package:tidyr':
+
+    crossing
+
+The following object is masked from 'package:tibble':
+
+    as_data_frame
+
+The following objects are masked from 'package:stats':
+
+    decompose, spectrum
+
+The following object is masked from 'package:base':
+
+    union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("data.table")</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)   <span class="co"># For efficient data handling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'data.table'
+
+The following object is masked from 'package:SummarizedExperiment':
+
+    shift
+
+The following object is masked from 'package:GenomicRanges':
+
+    shift
+
+The following object is masked from 'package:IRanges':
+
+    shift
+
+The following objects are masked from 'package:S4Vectors':
+
+    first, second
+
+The following objects are masked from 'package:lubridate':
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week,
+    yday, year
+
+The following objects are masked from 'package:dplyr':
+
+    between, first, last
+
+The following object is masked from 'package:purrr':
+
+    transpose</code></pre>
+</div>
+</div>
 </section>
 <section id="dataset-retrieval-and-preprocessing" class="level3">
 <h3 class="anchored" data-anchor-id="dataset-retrieval-and-preprocessing"><strong>1 Dataset Retrieval and Preprocessing</strong></h3>
@@ -124,60 +351,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Missing values are handled by replacing them with zero to maintain matrix integrity.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to load and preprocess GEO dataset</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>load_dataset <span class="ot">&lt;-</span> <span class="cf">function</span>(accession_id) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Retrieving"</span>, accession_id, <span class="st">"from GEO.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Retrieve GEO dataset</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  gds <span class="ot">&lt;-</span> <span class="fu">getGEO</span>(accession_id)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  gds_set <span class="ot">&lt;-</span> <span class="fu">GDS2eSet</span>(gds)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract gene expression matrix</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  expression <span class="ot">&lt;-</span> <span class="fu">exprs</span>(gds_set)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract and clean metadata (gene annotations)</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  annot <span class="ot">&lt;-</span> <span class="fu">fData</span>(gds_set)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  annot <span class="ot">&lt;-</span> annot[, <span class="fu">c</span>(<span class="st">"ID"</span>, <span class="st">"Gene symbol"</span>)]</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure that if multiple gene symbols are listed, only the last one is retained</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  annot<span class="sc">$</span><span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">str_split</span>(annot<span class="sc">$</span><span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>, <span class="st">"///"</span>), <span class="cf">function</span>(x) <span class="fu">trimws</span>(<span class="fu">tail</span>(x, <span class="dv">1</span>)))</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert expression matrix into a tidy dataframe</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  expression_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(expression) <span class="sc">|&gt;</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Probe_ID"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">merge</span>(annot, <span class="at">by.x =</span> <span class="st">"Probe_ID"</span>, <span class="at">by.y =</span> <span class="st">"ID"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>(<span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>Probe_ID) <span class="sc">|&gt;</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span>  <span class="co"># Aggregate probes by averaging expression</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">"Gene symbol"</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove genes that have all missing values across samples</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  expression_df <span class="ot">&lt;-</span> expression_df[(<span class="fu">rowSums</span>(<span class="fu">is.na</span>(expression_df)) <span class="sc">&lt;</span> <span class="fu">ncol</span>(expression_df)) <span class="sc">&amp;</span> <span class="fu">row.names</span>(expression_df) <span class="sc">!=</span> <span class="st">""</span>, ]</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Replace remaining NA values with 0 for consistency</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  expression_df[<span class="fu">is.na</span>(expression_df)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Loaded"</span>, accession_id, <span class="st">"as a dataframe.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(expression_df)</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Load multiple GEO datasets and store them in a list</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4994"</span>),</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4218"</span>),</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS3920"</span>),</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4152"</span>),</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4151"</span>),</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS3886"</span>),</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4150"</span>),</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4147"</span>),</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4146"</span>),</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4145"</span>),</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4142"</span>),</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS2978"</span>),</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS2419"</span>)</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to load and preprocess GEO dataset</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>load_dataset <span class="ot">&lt;-</span> <span class="cf">function</span>(accession_id) {</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Retrieving"</span>, accession_id, <span class="st">"from GEO.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Retrieve GEO dataset</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  gds <span class="ot">&lt;-</span> <span class="fu">getGEO</span>(accession_id)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  gds_set <span class="ot">&lt;-</span> <span class="fu">GDS2eSet</span>(gds)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract gene expression matrix</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  expression <span class="ot">&lt;-</span> <span class="fu">exprs</span>(gds_set)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract and clean metadata (gene annotations)</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  annot <span class="ot">&lt;-</span> <span class="fu">fData</span>(gds_set)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  annot <span class="ot">&lt;-</span> annot[, <span class="fu">c</span>(<span class="st">"ID"</span>, <span class="st">"Gene symbol"</span>)]</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure that if multiple gene symbols are listed, only the last one is retained</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  annot<span class="sc">$</span><span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">str_split</span>(annot<span class="sc">$</span><span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>, <span class="st">"///"</span>), <span class="cf">function</span>(x) <span class="fu">trimws</span>(<span class="fu">tail</span>(x, <span class="dv">1</span>)))</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert expression matrix into a tidy dataframe</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  expression_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(expression) <span class="sc">|&gt;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Probe_ID"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">merge</span>(annot, <span class="at">by.x =</span> <span class="st">"Probe_ID"</span>, <span class="at">by.y =</span> <span class="st">"ID"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>(<span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>Probe_ID) <span class="sc">|&gt;</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span>  <span class="co"># Aggregate probes by averaging expression</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">"Gene symbol"</span>)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove genes that have all missing values across samples</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  expression_df <span class="ot">&lt;-</span> expression_df[(<span class="fu">rowSums</span>(<span class="fu">is.na</span>(expression_df)) <span class="sc">&lt;</span> <span class="fu">ncol</span>(expression_df)) <span class="sc">&amp;</span> <span class="fu">row.names</span>(expression_df) <span class="sc">!=</span> <span class="st">""</span>, ]</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Replace remaining NA values with 0 for consistency</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  expression_df[<span class="fu">is.na</span>(expression_df)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Loaded"</span>, accession_id, <span class="st">"as a dataframe.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(expression_df)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Load multiple GEO datasets and store them in a list</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4994"</span>),</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4218"</span>),</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS3920"</span>),</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4152"</span>),</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4151"</span>),</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS3886"</span>),</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4150"</span>),</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4147"</span>),</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4146"</span>),</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4145"</span>),</span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4142"</span>),</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS2978"</span>),</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS2419"</span>)</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Retrieving GDS4994 from GEO.
 Loaded GDS4994 as a dataframe.
@@ -185,7 +412,7 @@ Retrieving GDS4218 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL570 found here:
-/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL570.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS4218 as a dataframe.
@@ -193,7 +420,7 @@ Retrieving GDS3920 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL570 found here:
-/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL570.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS3920 as a dataframe.
@@ -201,7 +428,7 @@ Retrieving GDS4152 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL570 found here:
-/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL570.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS4152 as a dataframe.
@@ -211,7 +438,7 @@ Retrieving GDS3886 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL6244 found here:
-/tmp/RtmpjYYjQJ/GPL6244.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL6244.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS3886 as a dataframe.
@@ -219,7 +446,7 @@ Retrieving GDS4150 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL570 found here:
-/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL570.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS4150 as a dataframe.
@@ -227,7 +454,7 @@ Retrieving GDS4147 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL570 found here:
-/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL570.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS4147 as a dataframe.
@@ -239,7 +466,7 @@ Retrieving GDS4142 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL570 found here:
-/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL570.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS4142 as a dataframe.
@@ -247,7 +474,7 @@ Retrieving GDS2978 from GEO.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Using locally cached version of GPL96 found here:
-/tmp/RtmpjYYjQJ/GPL96.annot.gz </code></pre>
+/tmp/RtmpMG1AHp/GPL96.annot.gz </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loaded GDS2978 as a dataframe.
@@ -263,364 +490,88 @@ Loaded GDS2419 as a dataframe.</code></pre>
 <li><p>Highly variable genes (top 0.1%) are selected to focus on biologically significant changes.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to normalize gene expression data</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>normalize_expression <span class="ot">&lt;-</span> <span class="cf">function</span>(expression) {</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If dataset is already normalized (values below 100), skip DESeq2 processing</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">max</span>(expression) <span class="sc">&lt;</span> <span class="dv">100</span>) {  </span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Dataset appears to be pre-normalized. Skipping DESeq2 processing."</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(expression)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure integer values for DESeq2 processing</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  de_input <span class="ot">&lt;-</span> <span class="fu">round</span>(expression)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create DESeq2 dataset for normalization</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> de_input, <span class="at">colData =</span> <span class="fu">data.frame</span>(<span class="at">row.names =</span> <span class="fu">colnames</span>(de_input)), <span class="at">design =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate size factors for normalization</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  dds <span class="ot">&lt;-</span> <span class="fu">estimateSizeFactors</span>(dds)</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Handle potential errors in DESeq processing</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tryCatch</span>({</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Standard DESeq dispersion estimation failed. Using gene-wise dispersion estimates..."</span>)</span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">estimateDispersionsGeneEst</span>(dds)</span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dispersions</span>(dds) <span class="ot">&lt;-</span> <span class="fu">mcols</span>(dds)<span class="sc">$</span>dispGeneEst</span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply variance-stabilizing transformation</span></span>
-<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  wpn_vsd <span class="ot">&lt;-</span> <span class="fu">getVarianceStabilizedData</span>(dds)</span>
-<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter top 0.5% most variable genes</span></span>
-<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  rv_wpn <span class="ot">&lt;-</span> <span class="fu">rowVars</span>(wpn_vsd)</span>
-<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  q999_wpn <span class="ot">&lt;-</span> <span class="fu">quantile</span>(rv_wpn, <span class="fl">0.999</span>)  </span>
-<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>  expr_normalized <span class="ot">&lt;-</span> wpn_vsd[rv_wpn <span class="sc">&gt;</span> q999_wpn, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(expr_normalized)</span>
-<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalize each dataset</span></span>
-<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>normalized_datasets <span class="ot">&lt;-</span> <span class="fu">map</span>(datasets, normalize_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 99 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 93 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 54 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 146 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Dataset appears to be pre-normalized. Skipping DESeq2 processing.
-Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 62 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 16 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 41 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>converting counts to integer mode</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>using pre-existing size factors</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>gene-wise dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>mean-dispersion relationship</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- note: fitType='parametric', but the dispersion trend was not well captured by the
-   function: y = a/x + b, and a local regression fit was automatically substituted.
-   specify fitType='local' or 'mean' to avoid this message next time.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>final dispersion estimates</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>-- replacing outliers and refitting for 64 genes
--- DESeq argument 'minReplicatesForReplace' = 7 
--- original counts are preserved in counts(dds)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>estimating dispersions</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>fitting model and testing</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to filter top 0.1% most variable genes in the merged dataset</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>filter_top_variable_genes <span class="ot">&lt;-</span> <span class="cf">function</span>(expression, <span class="at">variance =</span> <span class="fl">0.999</span>) {</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  expression_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(expression)  <span class="co"># Ensure matrix format</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure row names exist and store them</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">rownames</span>(expression_matrix))) {</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Error: Row names (gene symbols) are missing in the dataset!"</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  gene_symbols <span class="ot">&lt;-</span> <span class="fu">rownames</span>(expression_matrix)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate variance across genes</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  rv_wpn <span class="ot">&lt;-</span> <span class="fu">rowVars</span>(expression_matrix)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select top 0.1% most variable genes</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  q_wpn <span class="ot">&lt;-</span> <span class="fu">quantile</span>(rv_wpn, variance)  </span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  selected_genes <span class="ot">&lt;-</span> rv_wpn <span class="sc">&gt;</span> q_wpn  <span class="co"># Logical vector of selected genes</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply filtering and explicitly assign row names</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  expr_filtered <span class="ot">&lt;-</span> expression_matrix[selected_genes, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Explicitly ensure rownames are character strings, not numeric</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(expr_filtered) <span class="ot">&lt;-</span> <span class="fu">as.character</span>(gene_symbols[selected_genes])</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(expr_filtered)</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to normalize gene expression data</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>normalize_expression <span class="ot">&lt;-</span> <span class="cf">function</span>(expression) {</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Explicitly ensure gene symbols are character type before any processing</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">rownames</span>(expression))) {</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    gene_symbols <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">rownames</span>(expression))</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Error: Input data must have gene symbols as row names!"</span>)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If dataset is already normalized, skip DESeq2 processing but still filter</span></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">max</span>(expression) <span class="sc">&lt;</span> <span class="dv">100</span>) {  </span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Dataset appears to be pre-normalized. Skipping DESeq2 processing."</span>)</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">filter_top_variable_genes</span>(expression)</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Explicitly ensure rownames are preserved as character</span></span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames</span>(result) <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">rownames</span>(result))</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure integer values for DESeq2 processing</span></span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>  de_input <span class="ot">&lt;-</span> <span class="fu">round</span>(expression)</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create DESeq2 dataset for normalization</span></span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>  dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(</span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">countData =</span> de_input, </span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">colData =</span> <span class="fu">data.frame</span>(<span class="at">row.names =</span> <span class="fu">colnames</span>(de_input)), </span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">design =</span> <span class="sc">~</span><span class="dv">1</span></span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Explicitly set rownames of dds to the original gene symbols</span></span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(dds) <span class="ot">&lt;-</span> gene_symbols</span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate size factors for normalization</span></span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>  dds <span class="ot">&lt;-</span> <span class="fu">estimateSizeFactors</span>(dds)</span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Handle potential errors in DESeq processing</span></span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tryCatch</span>({</span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Standard DESeq dispersion estimation failed. Using gene-wise dispersion estimates..."</span>)</span>
+<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">estimateDispersionsGeneEst</span>(dds)</span>
+<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dispersions</span>(dds) <span class="ot">&lt;-</span> <span class="fu">mcols</span>(dds)<span class="sc">$</span>dispGeneEst</span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply variance-stabilizing transformation</span></span>
+<span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a>  wpn_vsd <span class="ot">&lt;-</span> <span class="fu">getVarianceStabilizedData</span>(dds)</span>
+<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Explicitly ensure rownames are preserved as character</span></span>
+<span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(wpn_vsd) <span class="ot">&lt;-</span> <span class="fu">as.character</span>(gene_symbols)</span>
+<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">filter_top_variable_genes</span>(wpn_vsd)</span>
+<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="merging-multiple-datasets" class="level3">
@@ -628,51 +579,31 @@ Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
 <ul>
 <li><p>Expression matrices from multiple datasets are merged based on gene symbols.</p></li>
 <li><p>Data tables (<strong>data.table</strong>) are used to efficiently combine large matrices.</p></li>
-<li><p>After merging, a second normalization step is applied to remove batch effects.</p></li>
+<li><p>After merging, a normalization step is applied to remove batch effects.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to merge multiple datasets into a single matrix</span></span>
-<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>merge_expression_data <span class="ot">&lt;-</span> <span class="cf">function</span>(datasets) {</span>
-<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert each dataset into a data.table for efficient merging</span></span>
-<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>  datasets <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets, <span class="cf">function</span>(df) <span class="fu">setDT</span>(<span class="fu">as.data.frame</span>(df), <span class="at">keep.rownames =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge all datasets on gene names using an outer join</span></span>
-<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a>  merged_data <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">"rn"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>), datasets)</span>
-<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb120-9"><a href="#cb120-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert back to data frame and set gene names as row names</span></span>
-<span id="cb120-10"><a href="#cb120-10" aria-hidden="true" tabindex="-1"></a>  merged_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(merged_data)</span>
-<span id="cb120-11"><a href="#cb120-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(merged_data) <span class="ot">&lt;-</span> merged_data<span class="sc">$</span>rn</span>
-<span id="cb120-12"><a href="#cb120-12" aria-hidden="true" tabindex="-1"></a>  merged_data<span class="sc">$</span>rn <span class="ot">&lt;-</span> <span class="cn">NULL</span>  <span class="co"># Remove redundant column</span></span>
-<span id="cb120-13"><a href="#cb120-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb120-14"><a href="#cb120-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(merged_data)</span>
-<span id="cb120-15"><a href="#cb120-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb120-16"><a href="#cb120-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-17"><a href="#cb120-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all datasets into a single matrix</span></span>
-<span id="cb120-18"><a href="#cb120-18" aria-hidden="true" tabindex="-1"></a>merged_expression <span class="ot">&lt;-</span> <span class="fu">merge_expression_data</span>(datasets)</span>
-<span id="cb120-19"><a href="#cb120-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-20"><a href="#cb120-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dimensions and summary of merged dataset</span></span>
-<span id="cb120-21"><a href="#cb120-21" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(merged_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 23338   422</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(merged_expression)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-</section>
-<section id="network-construction" class="level2">
-<h2 class="anchored" data-anchor-id="network-construction"><strong>Network Construction</strong></h2>
-<section id="mutual-information-calculation" class="level3">
-<h3 class="anchored" data-anchor-id="mutual-information-calculation"><strong>1 Mutual Information Calculation</strong></h3>
-<ul>
-<li><p>The <strong>Mutual Information Matrix (MIM)</strong> is calculated using the <strong>minet</strong> package.</p></li>
-<li><p>This captures statistical dependencies between gene expression profiles.</p></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace any remaining NA values with 0</span></span>
-<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>merged_expression[<span class="fu">is.na</span>(merged_expression)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Final normalization after merging</span></span>
-<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a>nm_expression <span class="ot">&lt;-</span> <span class="fu">normalize_expression</span>(merged_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to merge multiple datasets into a single matrix</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>merge_expression_data <span class="ot">&lt;-</span> <span class="cf">function</span>(datasets) {</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert each dataset into a data.table for efficient merging</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  datasets <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets, <span class="cf">function</span>(df) <span class="fu">setDT</span>(<span class="fu">as.data.frame</span>(df), <span class="at">keep.rownames =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge all datasets on gene names using an outer join</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  merged_data <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">"rn"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>), datasets)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert back to data frame and set gene names as row names</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  merged_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(merged_data)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(merged_data) <span class="ot">&lt;-</span> merged_data<span class="sc">$</span>rn</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  merged_data<span class="sc">$</span>rn <span class="ot">&lt;-</span> <span class="cn">NULL</span>  <span class="co"># Remove redundant column</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(merged_data)</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all datasets into a single matrix</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>merged_expression <span class="ot">&lt;-</span> <span class="fu">merge_expression_data</span>(datasets)</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>merged_expression[<span class="fu">is.na</span>(merged_expression)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>nm_expression <span class="ot">&lt;-</span> <span class="fu">normalize_expression</span>(merged_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>converting counts to integer mode</code></pre>
 </div>
@@ -708,12 +639,28 @@ Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>fitting model and testing</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check summary and dimensions of the final normalized dataset</span></span>
-<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(nm_expression)</span></span>
-<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(nm_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dimensions and summary of merged dataset</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(nm_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  24 422</code></pre>
 </div>
+</div>
+</section>
+</section>
+<section id="network-construction" class="level2">
+<h2 class="anchored" data-anchor-id="network-construction"><strong>Network Construction</strong></h2>
+<section id="mutual-information-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="mutual-information-calculation"><strong>1 Mutual Information Calculation</strong></h3>
+<ul>
+<li><p>The <strong>Mutual Information Matrix (MIM)</strong> is calculated using the <strong>minet</strong> package.</p></li>
+<li><p>This captures statistical dependencies between gene expression profiles.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transpose the matrix for network inference</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>normalized_expression <span class="ot">&lt;-</span> <span class="fu">t</span>(nm_expression)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute Mutual Information Matrix for gene-gene interactions</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>mi_matrix <span class="ot">&lt;-</span> minet<span class="sc">::</span><span class="fu">build.mim</span>(normalized_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="network-inference" class="level3">
@@ -724,15 +671,8 @@ Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
 <li><p>The result is an adjacency matrix where edges represent inferred regulatory interactions.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transpose the matrix for network inference</span></span>
-<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>normalized_expression <span class="ot">&lt;-</span> <span class="fu">t</span>(nm_expression)</span>
-<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute Mutual Information Matrix for gene-gene interactions</span></span>
-<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a>mi_matrix <span class="ot">&lt;-</span> minet<span class="sc">::</span><span class="fu">build.mim</span>(normalized_expression)</span>
-<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-7"><a href="#cb137-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Infer regulatory interactions using ARACNe algorithm with stricter thresholding</span></span>
-<span id="cb137-8"><a href="#cb137-8" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> minet<span class="sc">::</span><span class="fu">minet</span>(mi_matrix, <span class="at">method=</span><span class="st">"mrnet"</span>)</span>
-<span id="cb137-9"><a href="#cb137-9" aria-hidden="true" tabindex="-1"></a>network[network <span class="sc">&lt;</span> <span class="fl">0.15</span>] <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># Remove weak interactions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Infer regulatory interactions using ARACNe algorithm with stricter thresholding</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> minet<span class="sc">::</span><span class="fu">aracne</span>(mi_matrix, <span class="at">eps =</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="network-graph-construction" class="level3">
@@ -743,40 +683,40 @@ Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
 <li><p>A <strong>force-directed layout</strong> (Fruchterman-Reingold) is used for graph visualization.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract edges from the adjacency matrix</span></span>
-<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>network_edges <span class="ot">&lt;-</span> <span class="fu">which</span>(network <span class="sc">!=</span> <span class="dv">0</span>, <span class="at">arr.ind =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
-<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"Gene1"</span>, <span class="st">"Gene2"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb138-5"><a href="#cb138-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Gene1, Gene2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb138-6"><a href="#cb138-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-7"><a href="#cb138-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert row indices to gene names</span></span>
-<span id="cb138-8"><a href="#cb138-8" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Gene1 <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nm_expression)[network_edges<span class="sc">$</span>Gene1]</span>
-<span id="cb138-9"><a href="#cb138-9" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Gene2 <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nm_expression)[network_edges<span class="sc">$</span>Gene2]</span>
-<span id="cb138-10"><a href="#cb138-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-11"><a href="#cb138-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign edge weights based on interaction strength</span></span>
-<span id="cb138-12"><a href="#cb138-12" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Weight <span class="ot">&lt;-</span> network[<span class="fu">cbind</span>(network_edges<span class="sc">$</span>Gene1, network_edges<span class="sc">$</span>Gene2)]</span>
-<span id="cb138-13"><a href="#cb138-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-14"><a href="#cb138-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure unique edges by ordering gene pairs alphabetically</span></span>
-<span id="cb138-15"><a href="#cb138-15" aria-hidden="true" tabindex="-1"></a>network_edges <span class="ot">&lt;-</span> network_edges <span class="sc">|&gt;</span></span>
-<span id="cb138-16"><a href="#cb138-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb138-17"><a href="#cb138-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene1 =</span> <span class="fu">pmin</span>(Gene1, Gene2),</span>
-<span id="cb138-18"><a href="#cb138-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene2 =</span> <span class="fu">pmax</span>(Gene1, Gene2)</span>
-<span id="cb138-19"><a href="#cb138-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb138-20"><a href="#cb138-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Gene1, Gene2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb138-21"><a href="#cb138-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Gene1 <span class="sc">!=</span> Gene2)  <span class="co"># Remove self-interactions</span></span>
-<span id="cb138-22"><a href="#cb138-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-23"><a href="#cb138-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display final network size</span></span>
-<span id="cb138-24"><a href="#cb138-24" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(network_edges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract edges from the adjacency matrix</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>network_edges <span class="ot">&lt;-</span> <span class="fu">which</span>(network <span class="sc">!=</span> <span class="dv">0</span>, <span class="at">arr.ind =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"Gene1"</span>, <span class="st">"Gene2"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Gene1, Gene2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert row indices to gene names</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Gene1 <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nm_expression)[network_edges<span class="sc">$</span>Gene1]</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Gene2 <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nm_expression)[network_edges<span class="sc">$</span>Gene2]</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign edge weights based on interaction strength</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Weight <span class="ot">&lt;-</span> network[<span class="fu">cbind</span>(network_edges<span class="sc">$</span>Gene1, network_edges<span class="sc">$</span>Gene2)]</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure unique edges by ordering gene pairs alphabetically</span></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>network_edges <span class="ot">&lt;-</span> network_edges <span class="sc">|&gt;</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene1 =</span> <span class="fu">pmin</span>(Gene1, Gene2),</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene2 =</span> <span class="fu">pmax</span>(Gene1, Gene2)</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Gene1, Gene2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Gene1 <span class="sc">!=</span> Gene2)  <span class="co"># Remove self-interactions</span></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display final network size</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(network_edges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 40  3</code></pre>
+<pre><code>[1] 46  3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the gene interaction graph</span></span>
-<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(network_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute edge density (indicates network sparsity)</span></span>
-<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Edge Density:"</span>, <span class="fu">edge_density</span>(graph))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the gene interaction graph</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(network_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute edge density (indicates network sparsity)</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Edge Density:"</span>, <span class="fu">edge_density</span>(graph))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Edge Density: 0.1449275</code></pre>
+<pre><code>Edge Density: 0.1666667</code></pre>
 </div>
 </div>
 </section>
@@ -791,19 +731,19 @@ Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
 <li><p>Self-loops are removed to focus on inter-gene interactions.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the network graph</span></span>
-<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(graph, </span>
-<span id="cb142-3"><a href="#cb142-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(graph),  <span class="co"># Force-directed layout for better visualization</span></span>
-<span id="cb142-4"><a href="#cb142-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="dv">5</span>,</span>
-<span id="cb142-5"><a href="#cb142-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label.dist =</span> <span class="fl">1.5</span>,</span>
-<span id="cb142-6"><a href="#cb142-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width =</span> network_edges<span class="sc">$</span>Weight <span class="sc">*</span> <span class="dv">5</span>,  <span class="co"># Scale edge width based on interaction strength</span></span>
-<span id="cb142-7"><a href="#cb142-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"GRN of Multiple Sclerosis"</span>,</span>
-<span id="cb142-8"><a href="#cb142-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">margin =</span> <span class="dv">0</span>,</span>
-<span id="cb142-9"><a href="#cb142-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.color =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the network graph</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(graph, </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(graph),  <span class="co"># Force-directed layout for better visualization</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="dv">5</span>,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label.dist =</span> <span class="fl">1.5</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width =</span> network_edges<span class="sc">$</span>Weight <span class="sc">*</span> <span class="dv">5</span>,  <span class="co"># Scale edge width based on interaction strength</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"GRN of Multiple Sclerosis"</span>,</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">margin =</span> <span class="dv">0</span>,</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.color =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="grn_script_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="960"></p>
+<p><img src="grn_script_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="960"></p>
 </figure>
 </div>
 </div>
@@ -822,87 +762,87 @@ Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
 <li><p>Assortativity – Measures whether highly connected genes tend to interact with other highly connected genes.</p></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic Network Properties</span></span>
-<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Basic Network Properties:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic Network Properties</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Basic Network Properties:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Basic Network Properties:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Nodes:"</span>, <span class="fu">vcount</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">Edges:"</span>, <span class="fu">ecount</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Nodes:"</span>, <span class="fu">vcount</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">Edges:"</span>, <span class="fu">ecount</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Nodes: 24 
-Edges: 40 </code></pre>
+Edges: 46 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Edge Density:"</span>, <span class="fu">edge_density</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Edge Density:"</span>, <span class="fu">edge_density</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Edge Density: 0.1449275 </code></pre>
+<pre><code>Edge Density: 0.1666667 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree of genes and hubs</span></span>
-<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a>deg <span class="ot">&lt;-</span> <span class="fu">degree</span>(graph)</span>
-<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Degree of Graph"</span>, deg, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree of genes and hubs</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>deg <span class="ot">&lt;-</span> <span class="fu">degree</span>(graph)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Degree of Graph"</span>, deg, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Degree of Graph 8 5 6 2 9 2 1 2 2 2 8 4 3 4 2 1 2 1 4 2 2 3 2 3 </code></pre>
+<pre><code>Degree of Graph 9 2 6 2 3 6 6 2 2 6 6 4 4 3 4 4 6 1 2 2 2 3 5 2 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(deg, <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">main =</span> <span class="st">"Degree Distribution"</span>, <span class="at">xlab =</span> <span class="st">"Degree"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(deg, <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">main =</span> <span class="st">"Degree Distribution"</span>, <span class="at">xlab =</span> <span class="st">"Degree"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="grn_script_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="960"></p>
+<p><img src="grn_script_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="960"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a>hubs <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">degree</span>(graph), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(hubs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>hubs <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">degree</span>(graph), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(hubs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> HLA-C    FTL  RPS15   COX1   HBA1   RPS3 TMSB10  RPS17  RPS4X TMSB4X    UBB 
-     9      8      8      6      5      4      4      4      3      3      3 
-   HBB  HLA-A RPL23A   RPL3  RPL41    ND4  RPL32  RPS18   RPSA   TPT1  HLA-B 
-     2      2      2      2      2      2      2      2      2      2      1 
-RPL13A  RPL39 
-     1      1 </code></pre>
+<pre><code>  COX1  HLA-A RPL13A RPL23A  RPL41  RPS18   TPT1 TMSB10   RPS3  RPS4X   RPSA 
+     9      6      6      6      6      6      6      5      4      4      4 
+TMSB4X  HLA-B    FTL  RPS17   HBA1    HBB   RPL3  RPS15    ND4  RPL32  RPL39 
+     4      3      3      3      2      2      2      2      2      2      2 
+   UBB  HLA-C 
+     2      1 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Centrality of Nodes</span></span>
-<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>degree_centrality <span class="ot">&lt;-</span> <span class="fu">degree</span>(graph, <span class="at">mode =</span> <span class="st">"all"</span>)</span>
-<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>top_degree <span class="ot">&lt;-</span> <span class="fu">sort</span>(degree_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Degree Centrality:"</span>, top_degree, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Centrality of Nodes</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>degree_centrality <span class="ot">&lt;-</span> <span class="fu">degree</span>(graph, <span class="at">mode =</span> <span class="st">"all"</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>top_degree <span class="ot">&lt;-</span> <span class="fu">sort</span>(degree_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Degree Centrality:"</span>, top_degree, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Degree Centrality: 9 8 8 6 5 4 4 4 3 3 </code></pre>
+<pre><code>Degree Centrality: 9 6 6 6 6 6 6 5 4 4 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a>betweenness_centrality <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(graph, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>top_betweenness <span class="ot">&lt;-</span> <span class="fu">sort</span>(betweenness_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Betwennes: "</span>, top_betweenness, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>betweenness_centrality <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(graph, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>top_betweenness <span class="ot">&lt;-</span> <span class="fu">sort</span>(betweenness_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Betwennes: "</span>, top_betweenness, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Betwennes:  91.49524 74.4119 65.16429 29.98333 28.85714 19.84762 18.16667 16.98333 13.35238 11.64048 </code></pre>
+<pre><code>Betwennes:  61.95 61.72857 53.69048 48.41667 42.49286 38.02381 34.45476 30.88571 21.25 20.92381 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a>closeness_centrality <span class="ot">&lt;-</span> <span class="fu">closeness</span>(graph, <span class="at">normalized =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>top_closeness <span class="ot">&lt;-</span> <span class="fu">sort</span>(closeness_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Closeness: "</span>, top_closeness, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>closeness_centrality <span class="ot">&lt;-</span> <span class="fu">closeness</span>(graph, <span class="at">normalized =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>top_closeness <span class="ot">&lt;-</span> <span class="fu">sort</span>(closeness_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Closeness: "</span>, top_closeness, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Closeness:  0.5897436 0.5111111 0.5111111 0.4693878 0.4693878 0.4423077 0.4423077 0.4259259 0.4259259 0.4259259 </code></pre>
+<pre><code>Closeness:  0.5111111 0.4893617 0.4791667 0.4509804 0.4509804 0.4423077 0.4423077 0.4339623 0.4107143 0.3898305 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>clust_coeff <span class="ot">&lt;-</span> <span class="fu">transitivity</span>(graph, <span class="at">type =</span> <span class="st">"global"</span>)</span>
-<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Clustering Coefficient:"</span>, clust_coeff, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>clust_coeff <span class="ot">&lt;-</span> <span class="fu">transitivity</span>(graph, <span class="at">type =</span> <span class="st">"global"</span>)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Clustering Coefficient:"</span>, clust_coeff, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Clustering Coefficient: 0.1168831 </code></pre>
+<pre><code>Clustering Coefficient: 0.3728814 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> <span class="fu">cluster_fast_greedy</span>(graph)</span>
-<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of communities detected:"</span>, <span class="fu">length</span>(communities), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> <span class="fu">cluster_fast_greedy</span>(graph)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of communities detected:"</span>, <span class="fu">length</span>(communities), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Number of communities detected: 3 </code></pre>
+<pre><code>Number of communities detected: 4 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>diameter_graph <span class="ot">&lt;-</span> <span class="fu">diameter</span>(graph)</span>
-<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>mean_distance <span class="ot">&lt;-</span> <span class="fu">mean_distance</span>(graph)</span>
-<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Network Diameter:"</span>, diameter_graph, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>diameter_graph <span class="ot">&lt;-</span> <span class="fu">diameter</span>(graph)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>mean_distance <span class="ot">&lt;-</span> <span class="fu">mean_distance</span>(graph)</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Network Diameter:"</span>, diameter_graph, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Network Diameter: 5 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Average Path Length:"</span>, mean_distance, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Average Path Length:"</span>, mean_distance, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Average Path Length: 2.481884 </code></pre>
+<pre><code>Average Path Length: 2.688406 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>assort <span class="ot">&lt;-</span> <span class="fu">assortativity_degree</span>(graph)</span>
-<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Assortativity:"</span>, assort, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>assort <span class="ot">&lt;-</span> <span class="fu">assortativity_degree</span>(graph)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Assortativity:"</span>, assort, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Assortativity: -0.4396339 </code></pre>
+<pre><code>Assortativity: -0.1542322 </code></pre>
 </div>
 </div>
 </section>
@@ -913,8 +853,8 @@ RPL13A  RPL39
 <li><p>Removing hub genes tests how robust the network remains.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>graph_no_hubs <span class="ot">&lt;-</span> <span class="fu">delete_vertices</span>(graph, <span class="fu">names</span>(top_degree))</span>
-<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"New Network Size After Hub Removal:"</span>, <span class="fu">vcount</span>(graph_no_hubs), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>graph_no_hubs <span class="ot">&lt;-</span> <span class="fu">delete_vertices</span>(graph, <span class="fu">names</span>(top_degree))</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"New Network Size After Hub Removal:"</span>, <span class="fu">vcount</span>(graph_no_hubs), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>New Network Size After Hub Removal: 14 </code></pre>
 </div>
@@ -923,68 +863,22 @@ RPL13A  RPL39
 </section>
 <section id="results-and-discussion" class="level2">
 <h2 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h2>
-<p>The network properties and structural analysis provide crucial insights into the <strong>gene co-expression relationships</strong>, considering the <strong>ARACNe (ε = 0.15) for mutual information filtering</strong> and a <strong>0.1% top variance threshold for feature selection</strong>.</p>
-<section id="network-structure-sparsity" class="level3">
-<h3 class="anchored" data-anchor-id="network-structure-sparsity">1. Network Structure &amp; Sparsity</h3>
+<p>The gene regulatory network (GRN) analysis reveals a <strong>sparse yet well-structured</strong> network, consisting of <strong>24 nodes and 46 edges</strong>, with an <strong>edge density of 0.1667</strong>. Compared to previous iterations, this refined network maintains a hub-centric topology, while also exhibiting an increase in connectivity and clustering.</p>
+<p>🔹 <strong>Key Findings:</strong></p>
 <ul>
-<li><p>The final network consists of <strong>24 nodes and 40 edges</strong>, with an <strong>edge density of 0.1449</strong>, indicating a sparse structure.</p></li>
-<li><p>The <strong>ARACNe threshold (ε = 0.15)</strong> ensures that only the strongest associations are retained, <strong>removing weak/indirect interactions</strong>, which reduces false positives but may also filter out low-confidence edges.</p></li>
-<li><p>The <strong>0.1% top variance threshold</strong> ensures that <strong>only highly variable genes</strong> (i.e., those with significant differential expression) are included, improving biological relevance.</p></li>
+<li><p><strong>Hubs &amp; Connectivity:</strong> <em>COX1</em> (degree = 9) emerges as the most connected hub, while genes like <em>HLA-A, RPL13A, and RPL23A</em> (degree = 6) act as critical secondary nodes.</p></li>
+<li><p><strong>Centrality &amp; Influence:</strong> High betweenness values for <em>COX1</em> (61.95) and <em>HLA-A</em> (61.73) suggest their roles as major information flow regulators in the network.</p></li>
+<li><p><strong>Community Structure:</strong> The detection of <strong>4 distinct communities</strong> implies the presence of functionally distinct gene modules, hinting at underlying biological processes.</p></li>
+<li><p><strong>Network Efficiency:</strong> With an <strong>average path length of 2.69</strong> and <strong>diameter of 5</strong>, the network exhibits small-world properties, allowing efficient information propagation.</p></li>
+<li><p><strong>Robustness:</strong> The <strong>negative assortativity (-0.1542)</strong> suggests a hierarchical structure where hubs preferentially connect to low-degree nodes, a hallmark of biological networks.</p></li>
+<li><p><strong>Clustering &amp; Modularity:</strong> The <strong>clustering coefficient of 0.3729</strong> indicates a moderate level of local connectivity, reflecting modular functional interactions.</p></li>
 </ul>
-</section>
-<section id="node-centrality-connectivity" class="level3">
-<h3 class="anchored" data-anchor-id="node-centrality-connectivity"><strong>2. Node Centrality &amp; Connectivity</strong></h3>
-<ul>
-<li><p>The <strong>most connected genes (hubs)</strong> are <strong>HLA-C (degree = 9), FTL (8), RPS15 (8)</strong>, indicating their potential importance in network stability.</p></li>
-<li><p><strong>Betweenness centrality</strong> highlights <strong>HLA-C (91.49), FTL (74.41), and RPS15 (65.16)</strong> as critical regulators of information flow.</p></li>
-<li><p><strong>Closeness centrality values (max = 0.5897)</strong> suggest that hub genes are well-connected, ensuring efficient communication within the network.</p></li>
-</ul>
-<p>🔹 <strong>Effect of ARACNe (ε = 0.15)</strong>:</p>
-<ul>
-<li><p>This choice removes spurious edges but <strong>retains strong regulatory interactions</strong>, emphasizing biologically meaningful connections.</p></li>
-<li><p>The reduction in network density compared to unfiltered networks suggests that <strong>only highly significant gene interactions remain</strong>.</p></li>
-</ul>
-<p>🔹 <strong>Effect of 0.1% Variance Filtering</strong>:</p>
-<ul>
-<li>This restricts the network to <strong>only the most biologically relevant genes</strong>, likely capturing <strong>key regulators rather than noise-driven correlations</strong>.</li>
-</ul>
-</section>
-<section id="community-structure-clustering" class="level3">
-<h3 class="anchored" data-anchor-id="community-structure-clustering"><strong>3. Community Structure &amp; Clustering</strong></h3>
-<ul>
-<li><p>The network forms <strong>3 distinct communities</strong>, suggesting functionally <strong>distinct gene modules</strong>.</p></li>
-<li><p>The <strong>low clustering coefficient (0.1169)</strong> implies that <strong>genes do not form tightly connected clusters</strong>, possibly due to the stringent filtering of weaker edges.</p></li>
-</ul>
-</section>
-<section id="network-robustness-hub-dependency" class="level3">
-<h3 class="anchored" data-anchor-id="network-robustness-hub-dependency"><strong>4. Network Robustness &amp; Hub Dependency</strong></h3>
-<ul>
-<li><p>The <strong>negative assortativity (-0.4396)</strong> indicates a <strong>hierarchical network</strong>, where hubs connect to many low-degree nodes, a common feature in biological systems.</p></li>
-<li><p><strong>Hub removal reduces the network size to 14 nodes</strong>, confirming a <strong>strong reliance on a few key genes</strong> for network stability.</p></li>
-<li><p>This <strong>hub-and-spoke topology</strong> makes the network highly efficient but <strong>vulnerable to targeted disruptions</strong>.</p></li>
-</ul>
-</section>
-<section id="network-efficiency-small-world-properties" class="level3">
-<h3 class="anchored" data-anchor-id="network-efficiency-small-world-properties"><strong>5. Network Efficiency &amp; Small-World Properties</strong></h3>
-<ul>
-<li><p>The <strong>average path length (2.48)</strong> and <strong>diameter (5)</strong> suggest that the network remains efficiently connected, despite edge pruning.</p></li>
-<li><p>This supports a <strong>small-world property</strong>, where genes are <strong>not densely interconnected but still maintain short paths for information flow</strong>.</p></li>
-</ul>
-</section>
+<p>🔹 <strong>Impact of Hub Removal:</strong><br>
+Upon removing key hub genes, the network size reduces to <strong>14 nodes</strong>, reinforcing the importance of hubs in maintaining network integrity. This suggests that disrupting these highly connected genes could significantly affect the system’s overall functionality.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This <strong>ARACNe-filtered, variance-selected gene network</strong> highlights a <strong>hub-centric, sparse, and modular topology</strong>. The use of <strong>ε = 0.15</strong> ensures high-confidence interactions, while the <strong>0.1% variance threshold</strong> selects biologically significant genes.</p>
-<ul>
-<li><p><strong>HLA-C, FTL, and RPS15 emerge as key regulatory hubs</strong>, which may indicate <strong>biological significance in the studied condition</strong> (e.g., disease state, cellular response).</p></li>
-<li><p>The <strong>presence of three communities</strong> suggests distinct gene functional modules, possibly linked to different biological pathways.</p></li>
-<li><p>The <strong>negative assortativity and dependency on hubs</strong> highlight the network’s efficiency but also its <strong>fragility to targeted disruptions</strong>.</p></li>
-</ul>
-<p><strong>Biological Relevance:</strong></p>
-<ul>
-<li><p>These findings suggest that <strong>HLA-C, FTL, and RPS15</strong> could be <strong>potential biomarkers or key regulators</strong> in the system being studied.</p></li>
-<li><p>Further validation, such as <strong>functional enrichment analysis</strong>, would be necessary to confirm their exact biological roles.</p></li>
-</ul>
+<p>The constructed <strong>gene regulatory network (GRN)</strong> exhibits a <strong>hub-centric, modular, and small-world topology</strong>, with <strong>24 nodes and 46 edges</strong> at an <strong>edge density of 0.1667</strong>. Key hub genes like <em>COX1</em> (degree = 9), <em>HLA-A, RPL13A, and RPL23A</em> (degree = 6) play central roles in network connectivity, as reflected in their high <strong>betweenness centrality</strong> (max = 61.95), suggesting their importance in regulatory interactions. The presence of <strong>4 distinct communities</strong> indicates functional modularity, while a <strong>clustering coefficient of 0.3729</strong> suggests moderate local connectivity. The <strong>negative assortativity (-0.1542)</strong> confirms a hierarchical structure where hubs preferentially interact with low-degree nodes, typical of biological networks. With an <strong>average path length of 2.69</strong> and a <strong>diameter of 5</strong>, the network retains <strong>efficient information flow</strong>, characteristic of robust gene interactions. <strong>Hub removal reduces the network to 14 nodes</strong>, reinforcing the <strong>critical role of central genes</strong> in maintaining structural stability. These findings highlight <em>COX1, HLA-A, RPL13A,</em> and <em>RPL23A</em> as key regulatory players, warranting further <strong>functional enrichment analysis</strong> to determine their biological relevance in the studied condition.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
