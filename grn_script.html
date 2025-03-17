@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Adnan Raza">
+
+<title>Reconstructing GRN with GEO datasets for Multiple Sclerosis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="grn_script_files/libs/clipboard/clipboard.min.js"></script>
+<script src="grn_script_files/libs/quarto-html/quarto.js"></script>
+<script src="grn_script_files/libs/quarto-html/popper.min.js"></script>
+<script src="grn_script_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="grn_script_files/libs/quarto-html/anchor.min.js"></script>
+<link href="grn_script_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="grn_script_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="grn_script_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="grn_script_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="grn_script_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Reconstructing GRN with GEO datasets for Multiple Sclerosis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Adnan Raza </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Multiple sclerosis (MS) is a complex and debilitating neurological disorder that affects millions of people worldwide. As a student of bioinformatics with a keen interest in genomics and computational biology, I chose to explore MS for my assignment due to its intricate genetic and environmental interactions. The disease’s multifactorial nature makes it a compelling subject for bioinformatics-driven investigations, such as transcriptomic and genomic analyses, which can provide insights into disease progression, potential biomarkers, and therapeutic targets.</p>
+<p>MS is an autoimmune condition where the immune system mistakenly attacks the myelin sheath surrounding nerve fibers, leading to inflammation, neurodegeneration, and progressive disability (Dobson &amp; Giovannoni, 2019). Despite extensive research, the exact etiology of MS remains elusive, necessitating continued exploration using modern computational techniques. By leveraging high-throughput sequencing data and machine learning algorithms, bioinformatics plays a crucial role in identifying genetic variants, transcriptomic changes, and molecular pathways involved in MS pathogenesis (Baranzini &amp; Oksenberg, 2017).</p>
+<p>Furthermore, given the increasing accessibility of publicly available transcriptomic datasets, studying MS offers an opportunity to apply data science methodologies to real-world biomedical challenges. This assignment aims to integrate bioinformatics tools to analyze MS-related gene expression patterns, contributing to a deeper understanding of its molecular basis.</p>
+</section>
+<section id="methodology" class="level2">
+<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
+<section id="package-installation-and-setup" class="level3">
+<h3 class="anchored" data-anchor-id="package-installation-and-setup">Package Installation and Setup</h3>
+</section>
+<section id="dataset-retrieval-and-preprocessing" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-retrieval-and-preprocessing"><strong>1 Dataset Retrieval and Preprocessing</strong></h3>
+<ul>
+<li><p><strong>GEOquery</strong> is used to download datasets using their accession IDs.</p></li>
+<li><p>The dataset is converted into an <strong>expression matrix</strong>.</p></li>
+<li><p>Metadata is processed to map probe IDs to gene symbols.</p></li>
+<li><p>Genes with multiple probe IDs are aggregated by averaging expression values.</p></li>
+<li><p>Missing values are handled by replacing them with zero to maintain matrix integrity.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to load and preprocess GEO dataset</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>load_dataset <span class="ot">&lt;-</span> <span class="cf">function</span>(accession_id) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Retrieving"</span>, accession_id, <span class="st">"from GEO.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Retrieve GEO dataset</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  gds <span class="ot">&lt;-</span> <span class="fu">getGEO</span>(accession_id)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  gds_set <span class="ot">&lt;-</span> <span class="fu">GDS2eSet</span>(gds)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract gene expression matrix</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  expression <span class="ot">&lt;-</span> <span class="fu">exprs</span>(gds_set)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract and clean metadata (gene annotations)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  annot <span class="ot">&lt;-</span> <span class="fu">fData</span>(gds_set)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  annot <span class="ot">&lt;-</span> annot[, <span class="fu">c</span>(<span class="st">"ID"</span>, <span class="st">"Gene symbol"</span>)]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure that if multiple gene symbols are listed, only the last one is retained</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  annot<span class="sc">$</span><span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">str_split</span>(annot<span class="sc">$</span><span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>, <span class="st">"///"</span>), <span class="cf">function</span>(x) <span class="fu">trimws</span>(<span class="fu">tail</span>(x, <span class="dv">1</span>)))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert expression matrix into a tidy dataframe</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  expression_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(expression) <span class="sc">|&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Probe_ID"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">merge</span>(annot, <span class="at">by.x =</span> <span class="st">"Probe_ID"</span>, <span class="at">by.y =</span> <span class="st">"ID"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>(<span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>Probe_ID) <span class="sc">|&gt;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Gene symbol</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span>  <span class="co"># Aggregate probes by averaging expression</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">"Gene symbol"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove genes that have all missing values across samples</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  expression_df <span class="ot">&lt;-</span> expression_df[(<span class="fu">rowSums</span>(<span class="fu">is.na</span>(expression_df)) <span class="sc">&lt;</span> <span class="fu">ncol</span>(expression_df)) <span class="sc">&amp;</span> <span class="fu">row.names</span>(expression_df) <span class="sc">!=</span> <span class="st">""</span>, ]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Replace remaining NA values with 0 for consistency</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  expression_df[<span class="fu">is.na</span>(expression_df)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Loaded"</span>, accession_id, <span class="st">"as a dataframe.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(expression_df)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Load multiple GEO datasets and store them in a list</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4994"</span>),</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4218"</span>),</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS3920"</span>),</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4152"</span>),</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4151"</span>),</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS3886"</span>),</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4150"</span>),</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4147"</span>),</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4146"</span>),</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4145"</span>),</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS4142"</span>),</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS2978"</span>),</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_dataset</span>(<span class="st">"GDS2419"</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Retrieving GDS4994 from GEO.
+Loaded GDS4994 as a dataframe.
+Retrieving GDS4218 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL570 found here:
+/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS4218 as a dataframe.
+Retrieving GDS3920 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL570 found here:
+/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS3920 as a dataframe.
+Retrieving GDS4152 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL570 found here:
+/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS4152 as a dataframe.
+Retrieving GDS4151 from GEO.
+Loaded GDS4151 as a dataframe.
+Retrieving GDS3886 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL6244 found here:
+/tmp/RtmpjYYjQJ/GPL6244.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS3886 as a dataframe.
+Retrieving GDS4150 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL570 found here:
+/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS4150 as a dataframe.
+Retrieving GDS4147 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL570 found here:
+/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS4147 as a dataframe.
+Retrieving GDS4146 from GEO.
+Loaded GDS4146 as a dataframe.
+Retrieving GDS4145 from GEO.
+Loaded GDS4145 as a dataframe.
+Retrieving GDS4142 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL570 found here:
+/tmp/RtmpjYYjQJ/GPL570.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS4142 as a dataframe.
+Retrieving GDS2978 from GEO.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using locally cached version of GPL96 found here:
+/tmp/RtmpjYYjQJ/GPL96.annot.gz </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded GDS2978 as a dataframe.
+Retrieving GDS2419 from GEO.
+Loaded GDS2419 as a dataframe.</code></pre>
+</div>
+</div>
+</section>
+<section id="data-normalization" class="level3">
+<h3 class="anchored" data-anchor-id="data-normalization"><strong>2 Data Normalization</strong></h3>
+<ul>
+<li><p>If datasets are <strong>not normalized</strong>, DESeq2 is used to apply <strong>variance-stabilizing transformation (VST)</strong>.</p></li>
+<li><p>Highly variable genes (top 0.1%) are selected to focus on biologically significant changes.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to normalize gene expression data</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>normalize_expression <span class="ot">&lt;-</span> <span class="cf">function</span>(expression) {</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If dataset is already normalized (values below 100), skip DESeq2 processing</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">max</span>(expression) <span class="sc">&lt;</span> <span class="dv">100</span>) {  </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Dataset appears to be pre-normalized. Skipping DESeq2 processing."</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(expression)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure integer values for DESeq2 processing</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  de_input <span class="ot">&lt;-</span> <span class="fu">round</span>(expression)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create DESeq2 dataset for normalization</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> de_input, <span class="at">colData =</span> <span class="fu">data.frame</span>(<span class="at">row.names =</span> <span class="fu">colnames</span>(de_input)), <span class="at">design =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate size factors for normalization</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  dds <span class="ot">&lt;-</span> <span class="fu">estimateSizeFactors</span>(dds)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Handle potential errors in DESeq processing</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tryCatch</span>({</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Standard DESeq dispersion estimation failed. Using gene-wise dispersion estimates..."</span>)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">estimateDispersionsGeneEst</span>(dds)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dispersions</span>(dds) <span class="ot">&lt;-</span> <span class="fu">mcols</span>(dds)<span class="sc">$</span>dispGeneEst</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply variance-stabilizing transformation</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  wpn_vsd <span class="ot">&lt;-</span> <span class="fu">getVarianceStabilizedData</span>(dds)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter top 0.5% most variable genes</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  rv_wpn <span class="ot">&lt;-</span> <span class="fu">rowVars</span>(wpn_vsd)</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  q999_wpn <span class="ot">&lt;-</span> <span class="fu">quantile</span>(rv_wpn, <span class="fl">0.999</span>)  </span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>  expr_normalized <span class="ot">&lt;-</span> wpn_vsd[rv_wpn <span class="sc">&gt;</span> q999_wpn, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(expr_normalized)</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalize each dataset</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>normalized_datasets <span class="ot">&lt;-</span> <span class="fu">map</span>(datasets, normalize_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 99 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 93 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 54 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 146 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Dataset appears to be pre-normalized. Skipping DESeq2 processing.
+Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 62 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 16 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 41 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Dataset appears to be pre-normalized. Skipping DESeq2 processing.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- note: fitType='parametric', but the dispersion trend was not well captured by the
+   function: y = a/x + b, and a local regression fit was automatically substituted.
+   specify fitType='local' or 'mean' to avoid this message next time.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 64 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+</div>
+</section>
+<section id="merging-multiple-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="merging-multiple-datasets"><strong>3 Merging Multiple Datasets</strong></h3>
+<ul>
+<li><p>Expression matrices from multiple datasets are merged based on gene symbols.</p></li>
+<li><p>Data tables (<strong>data.table</strong>) are used to efficiently combine large matrices.</p></li>
+<li><p>After merging, a second normalization step is applied to remove batch effects.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to merge multiple datasets into a single matrix</span></span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>merge_expression_data <span class="ot">&lt;-</span> <span class="cf">function</span>(datasets) {</span>
+<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert each dataset into a data.table for efficient merging</span></span>
+<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>  datasets <span class="ot">&lt;-</span> <span class="fu">lapply</span>(datasets, <span class="cf">function</span>(df) <span class="fu">setDT</span>(<span class="fu">as.data.frame</span>(df), <span class="at">keep.rownames =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge all datasets on gene names using an outer join</span></span>
+<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a>  merged_data <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="cf">function</span>(x, y) <span class="fu">merge</span>(x, y, <span class="at">by =</span> <span class="st">"rn"</span>, <span class="at">all =</span> <span class="cn">TRUE</span>), datasets)</span>
+<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb120-9"><a href="#cb120-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert back to data frame and set gene names as row names</span></span>
+<span id="cb120-10"><a href="#cb120-10" aria-hidden="true" tabindex="-1"></a>  merged_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(merged_data)</span>
+<span id="cb120-11"><a href="#cb120-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(merged_data) <span class="ot">&lt;-</span> merged_data<span class="sc">$</span>rn</span>
+<span id="cb120-12"><a href="#cb120-12" aria-hidden="true" tabindex="-1"></a>  merged_data<span class="sc">$</span>rn <span class="ot">&lt;-</span> <span class="cn">NULL</span>  <span class="co"># Remove redundant column</span></span>
+<span id="cb120-13"><a href="#cb120-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb120-14"><a href="#cb120-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(merged_data)</span>
+<span id="cb120-15"><a href="#cb120-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb120-16"><a href="#cb120-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb120-17"><a href="#cb120-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all datasets into a single matrix</span></span>
+<span id="cb120-18"><a href="#cb120-18" aria-hidden="true" tabindex="-1"></a>merged_expression <span class="ot">&lt;-</span> <span class="fu">merge_expression_data</span>(datasets)</span>
+<span id="cb120-19"><a href="#cb120-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb120-20"><a href="#cb120-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dimensions and summary of merged dataset</span></span>
+<span id="cb120-21"><a href="#cb120-21" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(merged_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 23338   422</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(merged_expression)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="network-construction" class="level2">
+<h2 class="anchored" data-anchor-id="network-construction"><strong>Network Construction</strong></h2>
+<section id="mutual-information-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="mutual-information-calculation"><strong>1 Mutual Information Calculation</strong></h3>
+<ul>
+<li><p>The <strong>Mutual Information Matrix (MIM)</strong> is calculated using the <strong>minet</strong> package.</p></li>
+<li><p>This captures statistical dependencies between gene expression profiles.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace any remaining NA values with 0</span></span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>merged_expression[<span class="fu">is.na</span>(merged_expression)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Final normalization after merging</span></span>
+<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a>nm_expression <span class="ot">&lt;-</span> <span class="fu">normalize_expression</span>(merged_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>converting counts to integer mode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeq(dds): the design is ~ 1 (just an intercept). is this intended?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using pre-existing size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- replacing outliers and refitting for 367 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check summary and dimensions of the final normalized dataset</span></span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(nm_expression)</span></span>
+<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(nm_expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  24 422</code></pre>
+</div>
+</div>
+</section>
+<section id="network-inference" class="level3">
+<h3 class="anchored" data-anchor-id="network-inference"><strong>2 Network Inference</strong></h3>
+<ul>
+<li><p>The <strong>ARACNe</strong> algorithm is applied to infer <strong>gene-gene interactions</strong>.</p></li>
+<li><p>Weak interactions (below a threshold) are removed to retain strong regulatory relationships.</p></li>
+<li><p>The result is an adjacency matrix where edges represent inferred regulatory interactions.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transpose the matrix for network inference</span></span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>normalized_expression <span class="ot">&lt;-</span> <span class="fu">t</span>(nm_expression)</span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute Mutual Information Matrix for gene-gene interactions</span></span>
+<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a>mi_matrix <span class="ot">&lt;-</span> minet<span class="sc">::</span><span class="fu">build.mim</span>(normalized_expression)</span>
+<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-7"><a href="#cb137-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Infer regulatory interactions using ARACNe algorithm with stricter thresholding</span></span>
+<span id="cb137-8"><a href="#cb137-8" aria-hidden="true" tabindex="-1"></a>network <span class="ot">&lt;-</span> minet<span class="sc">::</span><span class="fu">minet</span>(mi_matrix, <span class="at">method=</span><span class="st">"mrnet"</span>)</span>
+<span id="cb137-9"><a href="#cb137-9" aria-hidden="true" tabindex="-1"></a>network[network <span class="sc">&lt;</span> <span class="fl">0.15</span>] <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># Remove weak interactions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="network-graph-construction" class="level3">
+<h3 class="anchored" data-anchor-id="network-graph-construction"><strong>3 Network Graph Construction</strong></h3>
+<ul>
+<li><p>The adjacency matrix is converted into an <strong>edge list</strong> for visualization.</p></li>
+<li><p>The network is modeled using <strong>igraph</strong>, treating genes as nodes and interactions as edges.</p></li>
+<li><p>A <strong>force-directed layout</strong> (Fruchterman-Reingold) is used for graph visualization.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract edges from the adjacency matrix</span></span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>network_edges <span class="ot">&lt;-</span> <span class="fu">which</span>(network <span class="sc">!=</span> <span class="dv">0</span>, <span class="at">arr.ind =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"Gene1"</span>, <span class="st">"Gene2"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb138-5"><a href="#cb138-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Gene1, Gene2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb138-6"><a href="#cb138-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-7"><a href="#cb138-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert row indices to gene names</span></span>
+<span id="cb138-8"><a href="#cb138-8" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Gene1 <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nm_expression)[network_edges<span class="sc">$</span>Gene1]</span>
+<span id="cb138-9"><a href="#cb138-9" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Gene2 <span class="ot">&lt;-</span> <span class="fu">rownames</span>(nm_expression)[network_edges<span class="sc">$</span>Gene2]</span>
+<span id="cb138-10"><a href="#cb138-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-11"><a href="#cb138-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign edge weights based on interaction strength</span></span>
+<span id="cb138-12"><a href="#cb138-12" aria-hidden="true" tabindex="-1"></a>network_edges<span class="sc">$</span>Weight <span class="ot">&lt;-</span> network[<span class="fu">cbind</span>(network_edges<span class="sc">$</span>Gene1, network_edges<span class="sc">$</span>Gene2)]</span>
+<span id="cb138-13"><a href="#cb138-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-14"><a href="#cb138-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure unique edges by ordering gene pairs alphabetically</span></span>
+<span id="cb138-15"><a href="#cb138-15" aria-hidden="true" tabindex="-1"></a>network_edges <span class="ot">&lt;-</span> network_edges <span class="sc">|&gt;</span></span>
+<span id="cb138-16"><a href="#cb138-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb138-17"><a href="#cb138-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene1 =</span> <span class="fu">pmin</span>(Gene1, Gene2),</span>
+<span id="cb138-18"><a href="#cb138-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gene2 =</span> <span class="fu">pmax</span>(Gene1, Gene2)</span>
+<span id="cb138-19"><a href="#cb138-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb138-20"><a href="#cb138-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Gene1, Gene2, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb138-21"><a href="#cb138-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Gene1 <span class="sc">!=</span> Gene2)  <span class="co"># Remove self-interactions</span></span>
+<span id="cb138-22"><a href="#cb138-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-23"><a href="#cb138-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display final network size</span></span>
+<span id="cb138-24"><a href="#cb138-24" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(network_edges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40  3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the gene interaction graph</span></span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(network_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute edge density (indicates network sparsity)</span></span>
+<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Edge Density:"</span>, <span class="fu">edge_density</span>(graph))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Edge Density: 0.1449275</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="visualization-and-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-and-analysis"><strong>Visualization and Analysis</strong></h2>
+<section id="network-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="network-visualization"><strong>1 Network Visualization</strong></h3>
+<ul>
+<li><p>Nodes represent genes, and edges represent inferred regulatory interactions.</p></li>
+<li><p>Edge width is scaled based on interaction strength.</p></li>
+<li><p>Self-loops are removed to focus on inter-gene interactions.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the network graph</span></span>
+<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(graph, </span>
+<span id="cb142-3"><a href="#cb142-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout =</span> <span class="fu">layout_with_fr</span>(graph),  <span class="co"># Force-directed layout for better visualization</span></span>
+<span id="cb142-4"><a href="#cb142-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="dv">5</span>,</span>
+<span id="cb142-5"><a href="#cb142-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label.dist =</span> <span class="fl">1.5</span>,</span>
+<span id="cb142-6"><a href="#cb142-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width =</span> network_edges<span class="sc">$</span>Weight <span class="sc">*</span> <span class="dv">5</span>,  <span class="co"># Scale edge width based on interaction strength</span></span>
+<span id="cb142-7"><a href="#cb142-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"GRN of Multiple Sclerosis"</span>,</span>
+<span id="cb142-8"><a href="#cb142-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">margin =</span> <span class="dv">0</span>,</span>
+<span id="cb142-9"><a href="#cb142-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.color =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="grn_script_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="topological-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="topological-analysis">2 Topological Analysis</h3>
+<ol type="1">
+<li><p>Node Degree – Measures how many connections each gene has.</p></li>
+<li><p>Betweenness Centrality – Identifies genes that act as bridges between communities.</p></li>
+<li><p>Closeness Centrality – Determines how easily a gene can influence others.</p></li>
+<li><p>Clustering Coefficient – Measures local connectivity (tendency to form clusters).</p></li>
+<li><p>Network Density – Indicates how interconnected the network is.</p></li>
+<li><p>Community Detection – Identifies functional gene clusters using <strong>fast-greedy clustering</strong>.</p></li>
+<li><p>Network Diameter – Longest shortest path in the network, showing maximum interaction distance.</p></li>
+<li><p>Assortativity – Measures whether highly connected genes tend to interact with other highly connected genes.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic Network Properties</span></span>
+<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Basic Network Properties:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Basic Network Properties:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Nodes:"</span>, <span class="fu">vcount</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">Edges:"</span>, <span class="fu">ecount</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Nodes: 24 
+Edges: 40 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Edge Density:"</span>, <span class="fu">edge_density</span>(graph), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Edge Density: 0.1449275 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree of genes and hubs</span></span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a>deg <span class="ot">&lt;-</span> <span class="fu">degree</span>(graph)</span>
+<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Degree of Graph"</span>, deg, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Degree of Graph 8 5 6 2 9 2 1 2 2 2 8 4 3 4 2 1 2 1 4 2 2 3 2 3 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(deg, <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">main =</span> <span class="st">"Degree Distribution"</span>, <span class="at">xlab =</span> <span class="st">"Degree"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="grn_script_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a>hubs <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">degree</span>(graph), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(hubs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> HLA-C    FTL  RPS15   COX1   HBA1   RPS3 TMSB10  RPS17  RPS4X TMSB4X    UBB 
+     9      8      8      6      5      4      4      4      3      3      3 
+   HBB  HLA-A RPL23A   RPL3  RPL41    ND4  RPL32  RPS18   RPSA   TPT1  HLA-B 
+     2      2      2      2      2      2      2      2      2      2      1 
+RPL13A  RPL39 
+     1      1 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Centrality of Nodes</span></span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>degree_centrality <span class="ot">&lt;-</span> <span class="fu">degree</span>(graph, <span class="at">mode =</span> <span class="st">"all"</span>)</span>
+<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>top_degree <span class="ot">&lt;-</span> <span class="fu">sort</span>(degree_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Degree Centrality:"</span>, top_degree, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Degree Centrality: 9 8 8 6 5 4 4 4 3 3 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a>betweenness_centrality <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(graph, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>top_betweenness <span class="ot">&lt;-</span> <span class="fu">sort</span>(betweenness_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Betwennes: "</span>, top_betweenness, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Betwennes:  91.49524 74.4119 65.16429 29.98333 28.85714 19.84762 18.16667 16.98333 13.35238 11.64048 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a>closeness_centrality <span class="ot">&lt;-</span> <span class="fu">closeness</span>(graph, <span class="at">normalized =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>top_closeness <span class="ot">&lt;-</span> <span class="fu">sort</span>(closeness_centrality, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Closeness: "</span>, top_closeness, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Closeness:  0.5897436 0.5111111 0.5111111 0.4693878 0.4693878 0.4423077 0.4423077 0.4259259 0.4259259 0.4259259 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>clust_coeff <span class="ot">&lt;-</span> <span class="fu">transitivity</span>(graph, <span class="at">type =</span> <span class="st">"global"</span>)</span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Clustering Coefficient:"</span>, clust_coeff, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Clustering Coefficient: 0.1168831 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> <span class="fu">cluster_fast_greedy</span>(graph)</span>
+<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of communities detected:"</span>, <span class="fu">length</span>(communities), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of communities detected: 3 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>diameter_graph <span class="ot">&lt;-</span> <span class="fu">diameter</span>(graph)</span>
+<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>mean_distance <span class="ot">&lt;-</span> <span class="fu">mean_distance</span>(graph)</span>
+<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Network Diameter:"</span>, diameter_graph, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Network Diameter: 5 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Average Path Length:"</span>, mean_distance, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average Path Length: 2.481884 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>assort <span class="ot">&lt;-</span> <span class="fu">assortativity_degree</span>(graph)</span>
+<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Assortativity:"</span>, assort, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Assortativity: -0.4396339 </code></pre>
+</div>
+</div>
+</section>
+<section id="impact-of-hub-genes" class="level3">
+<h3 class="anchored" data-anchor-id="impact-of-hub-genes">3 Impact of Hub Genes</h3>
+<ul>
+<li><p>Hub genes are highly connected nodes with potential biological significance.</p></li>
+<li><p>Removing hub genes tests how robust the network remains.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>graph_no_hubs <span class="ot">&lt;-</span> <span class="fu">delete_vertices</span>(graph, <span class="fu">names</span>(top_degree))</span>
+<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"New Network Size After Hub Removal:"</span>, <span class="fu">vcount</span>(graph_no_hubs), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>New Network Size After Hub Removal: 14 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="results-and-discussion" class="level2">
+<h2 class="anchored" data-anchor-id="results-and-discussion">Results and Discussion</h2>
+<p>The network properties and structural analysis provide crucial insights into the <strong>gene co-expression relationships</strong>, considering the <strong>ARACNe (ε = 0.15) for mutual information filtering</strong> and a <strong>0.1% top variance threshold for feature selection</strong>.</p>
+<section id="network-structure-sparsity" class="level3">
+<h3 class="anchored" data-anchor-id="network-structure-sparsity">1. Network Structure &amp; Sparsity</h3>
+<ul>
+<li><p>The final network consists of <strong>24 nodes and 40 edges</strong>, with an <strong>edge density of 0.1449</strong>, indicating a sparse structure.</p></li>
+<li><p>The <strong>ARACNe threshold (ε = 0.15)</strong> ensures that only the strongest associations are retained, <strong>removing weak/indirect interactions</strong>, which reduces false positives but may also filter out low-confidence edges.</p></li>
+<li><p>The <strong>0.1% top variance threshold</strong> ensures that <strong>only highly variable genes</strong> (i.e., those with significant differential expression) are included, improving biological relevance.</p></li>
+</ul>
+</section>
+<section id="node-centrality-connectivity" class="level3">
+<h3 class="anchored" data-anchor-id="node-centrality-connectivity"><strong>2. Node Centrality &amp; Connectivity</strong></h3>
+<ul>
+<li><p>The <strong>most connected genes (hubs)</strong> are <strong>HLA-C (degree = 9), FTL (8), RPS15 (8)</strong>, indicating their potential importance in network stability.</p></li>
+<li><p><strong>Betweenness centrality</strong> highlights <strong>HLA-C (91.49), FTL (74.41), and RPS15 (65.16)</strong> as critical regulators of information flow.</p></li>
+<li><p><strong>Closeness centrality values (max = 0.5897)</strong> suggest that hub genes are well-connected, ensuring efficient communication within the network.</p></li>
+</ul>
+<p>🔹 <strong>Effect of ARACNe (ε = 0.15)</strong>:</p>
+<ul>
+<li><p>This choice removes spurious edges but <strong>retains strong regulatory interactions</strong>, emphasizing biologically meaningful connections.</p></li>
+<li><p>The reduction in network density compared to unfiltered networks suggests that <strong>only highly significant gene interactions remain</strong>.</p></li>
+</ul>
+<p>🔹 <strong>Effect of 0.1% Variance Filtering</strong>:</p>
+<ul>
+<li>This restricts the network to <strong>only the most biologically relevant genes</strong>, likely capturing <strong>key regulators rather than noise-driven correlations</strong>.</li>
+</ul>
+</section>
+<section id="community-structure-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="community-structure-clustering"><strong>3. Community Structure &amp; Clustering</strong></h3>
+<ul>
+<li><p>The network forms <strong>3 distinct communities</strong>, suggesting functionally <strong>distinct gene modules</strong>.</p></li>
+<li><p>The <strong>low clustering coefficient (0.1169)</strong> implies that <strong>genes do not form tightly connected clusters</strong>, possibly due to the stringent filtering of weaker edges.</p></li>
+</ul>
+</section>
+<section id="network-robustness-hub-dependency" class="level3">
+<h3 class="anchored" data-anchor-id="network-robustness-hub-dependency"><strong>4. Network Robustness &amp; Hub Dependency</strong></h3>
+<ul>
+<li><p>The <strong>negative assortativity (-0.4396)</strong> indicates a <strong>hierarchical network</strong>, where hubs connect to many low-degree nodes, a common feature in biological systems.</p></li>
+<li><p><strong>Hub removal reduces the network size to 14 nodes</strong>, confirming a <strong>strong reliance on a few key genes</strong> for network stability.</p></li>
+<li><p>This <strong>hub-and-spoke topology</strong> makes the network highly efficient but <strong>vulnerable to targeted disruptions</strong>.</p></li>
+</ul>
+</section>
+<section id="network-efficiency-small-world-properties" class="level3">
+<h3 class="anchored" data-anchor-id="network-efficiency-small-world-properties"><strong>5. Network Efficiency &amp; Small-World Properties</strong></h3>
+<ul>
+<li><p>The <strong>average path length (2.48)</strong> and <strong>diameter (5)</strong> suggest that the network remains efficiently connected, despite edge pruning.</p></li>
+<li><p>This supports a <strong>small-world property</strong>, where genes are <strong>not densely interconnected but still maintain short paths for information flow</strong>.</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This <strong>ARACNe-filtered, variance-selected gene network</strong> highlights a <strong>hub-centric, sparse, and modular topology</strong>. The use of <strong>ε = 0.15</strong> ensures high-confidence interactions, while the <strong>0.1% variance threshold</strong> selects biologically significant genes.</p>
+<ul>
+<li><p><strong>HLA-C, FTL, and RPS15 emerge as key regulatory hubs</strong>, which may indicate <strong>biological significance in the studied condition</strong> (e.g., disease state, cellular response).</p></li>
+<li><p>The <strong>presence of three communities</strong> suggests distinct gene functional modules, possibly linked to different biological pathways.</p></li>
+<li><p>The <strong>negative assortativity and dependency on hubs</strong> highlight the network’s efficiency but also its <strong>fragility to targeted disruptions</strong>.</p></li>
+</ul>
+<p><strong>Biological Relevance:</strong></p>
+<ul>
+<li><p>These findings suggest that <strong>HLA-C, FTL, and RPS15</strong> could be <strong>potential biomarkers or key regulators</strong> in the system being studied.</p></li>
+<li><p>Further validation, such as <strong>functional enrichment analysis</strong>, would be necessary to confirm their exact biological roles.</p></li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li>Albert, R. (2005). Scale-free networks in cell biology. Journal of Cell Science, 118(21), 4947-4957. https://doi.org/10.1242/jcs.02714 2. Barabási, A. L., &amp; Albert, R. (1999). Emergence of scaling in random networks. Science, 286(5439), 509-512. https://doi.org/10.1126/science.286.5439.509</li>
+<li>Baranzini, S. E., &amp; Oksenberg, J. R. (2017). The genetics of multiple sclerosis: From 0 to 200 in 50 years. Trends in Genetics, 33(12), 960-970.</li>
+<li>Bioconductor Project. (n.d.). Retrieved from https://www.bioconductor.org/</li>
+<li>Bioconductor GEOquery package. (n.d.). Retrieved from https://bioconductor.org/packages/release/bioc/html/GEOquery.html</li>
+<li><strong>Bioinformatics Workbook.</strong> (n.d.). <em>WGCNA Tutorial</em>. Retrieved from <a href="https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0" class="uri">https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0</a></li>
+<li>Csardi, G., &amp; Nepusz, T. (2006). The igraph software package for complex network research. InterJournal, Complex Systems, 1695. Retrieved from https://igraph.org</li>
+<li>Davis, S., &amp; Meltzer, P. S. (2007). GEOquery: A bridge between the Gene Expression Omnibus (GEO) and BioConductor. Bioinformatics, 23(14), 1846-1847. https://doi.org/10.1093/bioinformatics/btm254</li>
+<li>DESeq2 Bioconductor package. (n.d.). Retrieved from https://bioconductor.org/packages/release/bioc/html/DESeq2.html</li>
+<li>Dobson, R., &amp; Giovannoni, G. (2019). Multiple sclerosis – A review. European Journal of Neurology, 26(1), 27-40.</li>
+<li>Fortunato, S. (2010). Community detection in graphs. Physics Reports, 486(3-5), 75-174. https://doi.org/10.1016/j.physrep.2009.11.002</li>
+<li>GEO Database. (n.d.). Retrieved from https://www.ncbi.nlm.nih.gov/geo/</li>
+<li>Gentleman, R. (2008). R Programming for Bioinformatics. Chapman &amp; Hall/CRC.</li>
+<li>Love, M. I., Huber, W., &amp; Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15, 550. https://doi.org/10.1186/s13059-014-0550-8</li>
+<li>Margolin, A. A., et al.&nbsp;(2006). ARACNE: An algorithm for the reconstruction of gene regulatory networks in a mammalian cellular context. BMC Bioinformatics, 7, S7. https://doi.org/10.1186/1471-2105-7-S1-S7</li>
+<li>Meyer, P. E., Lafitte, F., &amp; Bontempi, G. (2008). minet: A R/Bioconductor package for mutual information based network inference. Bioinformatics, 24(3), 300-302. https://doi.org/10.1093/bioinformatics/btm554</li>
+<li>Newman, M. E. J. (2006). Modularity and community structure in networks. Proceedings of the National Academy of Sciences, 103(23), 8577-8582. https://doi.org/10.1073/pnas.0601602103</li>
+<li>Quarto Documentation. (n.d.). Retrieved from https://quarto.org/docs/</li>
+<li>Stuart, J. M., Segal, E., Koller, D., &amp; Kim, S. K. (2003). A gene-coexpression network for global discovery of conserved genetic modules. Science, 302(5643), 249-255. https://doi.org/10.1126/science.1087447</li>
+</ol>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
